@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Shree Royal Salon Management</title>
+  
+  <!-- FontAwesome & Chart.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Table Styling for Admin Panel */
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .admin-table th, .admin-table td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .admin-table th {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--bg-surface-soft);
+    }
+    .admin-table tbody tr:hover {
+      background: rgba(0, 0, 0, 0.015);
+    }
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .kanban-col {
+      background: var(--bg-surface-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      border: 1px solid var(--border-medium);
+      min-height: 480px;
+    }
+    .kanban-col-header {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-main);
+    }
+    @media (max-width: 1100px) {
+      .kanban-board {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      .kanban-board {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body style="background-color: var(--bg-base);">
+
+  <!-- ==========================================
+       ADMIN AUTH GATEKEEPER OVERLAY
+       Shown when user is not logged in as Admin
+       ========================================== -->
+  <div id="adminAuthOverlay" class="modal-overlay" style="display: none;">
+    <div class="modal-card" style="width: 500px; max-width: 95%;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--primary-light); color: var(--primary-hover); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin: 0 auto 12px; border: 1px solid var(--primary-border);">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--text-main); margin-bottom: 4px;">Admin Portal Access</h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem;">Executive Salon Management & Operations Control</p>
+      </div>
+
+      <!-- Mode Switcher: Admin Login vs Admin Register -->
+      <div class="auth-primary-tabs">
+        <button class="auth-primary-tab active" id="adminGateTabLogin">
+          <i class="fa-solid fa-right-to-bracket"></i> Admin Login
+        </button>
+        <button class="auth-primary-tab" id="adminGateTabRegister">
+          <i class="fa-solid fa-user-plus"></i> Admin Register
+        </button>
+      </div>
+
+      <!-- Form 1: Admin Login -->
+      <div id="adminGateLoginForm">
+        <div class="form-group">
+          <label class="form-label">Admin Username</label>
+          <input type="text" id="adminGateUser" class="form-control" placeholder="e.g. admin" value="admin" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="adminGatePass" class="form-control" placeholder="e.g. admin123" value="admin123" />
+          <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 4px;">Default credentials: <code>admin</code> / <code>admin123</code></span>
+        </div>
+        <button class="btn btn-primary" id="adminGateLoginBtn" style="width: 100%; margin-top: 10px;">
+          <i class="fa-solid fa-sign-in-alt"></i> Login to Admin Dashboard
+        </button>
+      </div>
+
+      <!-- Form 2: Admin Register -->
+      <div id="adminGateRegisterForm" style="display: none;">
+        <div class="form-group">
+          <label class="form-label">Admin Username *</label>
+          <input type="text" id="adminGateRegUser" class="form-control" placeholder="e.g. manager2" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" id="adminGateRegName" class="form-control" placeholder="e.g. Deepa Nair" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Official Email</label>
+          <input type="email" id="adminGateRegEmail" class="form-control" placeholder="deepa@salon.in" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Create Password *</label>
+          <input type="password" id="adminGateRegPass" class="form-control" placeholder="Create admin password" />
+        </div>
+        <button class="btn btn-primary" id="adminGateRegBtn" style="width: 100%; margin-top: 10px;">
+          <i class="fa-solid fa-user-shield"></i> Register as Salon Admin
+        </button>
+      </div>
+
+      <div id="adminGateAlert" style="margin-top: 14px; display: none;"></div>
+
+      <div style="margin-top: 20px; border-top: 1px solid var(--border-light); padding-top: 14px; text-align: center;">
+        <a href="index.html" class="btn btn-secondary btn-sm" style="width: 100%;">
+          <i class="fa-solid fa-arrow-left"></i> Return to Customer Booking Portal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Admin Layout -->
+  <div class="admin-layout" id="adminAppLayout">
+    <!-- ==========================================
+         ADMIN SIDEBAR
+         ========================================== -->
+    <aside class="admin-sidebar">
+      <a href="index.html" class="brand-logo" style="margin-bottom: 10px;">
+        <div class="brand-icon"><i class="fa-solid fa-scissors"></i></div>
+        <span>SHREE ROYAL<span class="gold-accent-text"> ADMIN</span></span>
+      </a>
+
+      <ul class="admin-nav">
+        <li class="admin-nav-item">
+          <button class="active" data-tab="appointments">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Appointments</span>
+          </button>
+        </li>
+        <li class="admin-nav-item">
+          <button data-tab="services">
+            <i class="fa-solid fa-list-check"></i>
+            <span>Services Menu</span>
+          </button>
+        </li>
+        <li class="admin-nav-item">
+          <button data-tab="stylists">
+            <i class="fa-solid fa-user-group"></i>
+            <span>Stylists & Staff</span>
+          </button>
+        </li>
+        <li class="admin-nav-item">
+          <button data-tab="analytics">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>POS Analytics</span>
+          </button>
+        </li>
+      </ul>
+
+      <div style="margin-top: auto; padding-top: 20px;">
+        <a href="index.html" class="btn btn-secondary btn-sm" style="width: 100%; margin-bottom: 10px;">
+          <i class="fa-solid fa-arrow-left"></i> Customer Portal
+        </a>
+        <button class="btn btn-secondary btn-sm" onclick="adminLogout()" style="width: 100%;">
+          <i class="fa-solid fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- ==========================================
+         MAIN CONTENT AREA
+         ========================================== -->
+    <main class="admin-main">
+      <!-- Top Bar -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--text-main);">Salon Management Portal</h1>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">Real-time booking pipeline, staff schedules, and POS invoice billing.</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <div id="adminDbStatus" class="badge badge-success"><i class="fa-solid fa-spinner fa-spin"></i> Checking DB</div>
+          <span class="badge badge-primary" id="adminUserBadge"><i class="fa-solid fa-user-shield"></i> Admin</span>
+          <button class="btn btn-secondary btn-sm" onclick="adminLogout()"><i class="fa-solid fa-sign-out-alt"></i> Logout</button>
+          <button class="btn btn-primary btn-sm" onclick="location.href='index.html#tracker'"><i class="fa-solid fa-magnifying-glass"></i> Track Booking</button>
+        </div>
+      </div>
+
+      <!-- KPI METRICS ROW -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div>
+            <div class="kpi-label">Today's Bookings</div>
+            <div class="kpi-value" id="kpiTodayApps">0</div>
+          </div>
+          <div class="kpi-icon" style="background: var(--primary-light); color: var(--primary-hover);"><i class="fa-solid fa-calendar-check"></i></div>
+        </div>
+
+        <div class="kpi-card">
+          <div>
+            <div class="kpi-label">Total Revenue (INR)</div>
+            <div class="kpi-value" id="kpiRevenue">₹0</div>
+          </div>
+          <div class="kpi-icon" style="background: var(--success-light); color: var(--success);"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+        </div>
+
+        <div class="kpi-card">
+          <div>
+            <div class="kpi-label">Active Stylists</div>
+            <div class="kpi-value" id="kpiActiveStylists">0</div>
+          </div>
+          <div class="kpi-icon" style="background: var(--warning-light); color: var(--warning);"><i class="fa-solid fa-scissors"></i></div>
+        </div>
+
+        <div class="kpi-card">
+          <div>
+            <div class="kpi-label">Active Services</div>
+            <div class="kpi-value" id="kpiTotalServices">0</div>
+          </div>
+          <div class="kpi-icon" style="background: var(--secondary-light); color: var(--secondary);"><i class="fa-solid fa-spa"></i></div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 1: APPOINTMENTS KANBAN PIPELINE
+           ========================================== -->
+      <div id="tabContent-appointments" class="admin-tab-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="font-size: 1.4rem;">Appointment Booking Pipeline</h2>
+          <span style="font-size: 0.85rem; color: var(--text-muted);"><i class="fa-solid fa-info-circle"></i> Click status buttons to advance workflow or bill slip to print invoice.</span>
+        </div>
+
+        <div class="kanban-board">
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <span><i class="fa-solid fa-clock" style="color: var(--warning);"></i> Pending</span>
+            </div>
+            <div id="colPending"></div>
+          </div>
+
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <span><i class="fa-solid fa-check-circle" style="color: var(--primary);"></i> Confirmed</span>
+            </div>
+            <div id="colConfirmed"></div>
+          </div>
+
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <span><i class="fa-solid fa-play" style="color: #2563EB;"></i> In-Progress</span>
+            </div>
+            <div id="colInProgress"></div>
+          </div>
+
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <span><i class="fa-solid fa-flag-checkered" style="color: var(--success);"></i> Completed</span>
+            </div>
+            <div id="colCompleted"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 2: SERVICES MANAGEMENT
+           ========================================== -->
+      <div id="tabContent-services" class="admin-tab-content" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2 style="font-size: 1.4rem;">Service Offerings & Pricing (INR)</h2>
+          <button id="openAddServiceModalBtn" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add New Service</button>
+        </div>
+
+        <div class="glass-panel" style="overflow-x: auto; padding: 10px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Service Name & Category</th>
+                <th>Duration</th>
+                <th>Price (₹)</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="servicesTableBody">
+              <!-- Injected by admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 3: STYLISTS DIRECTORY
+           ========================================== -->
+      <div id="tabContent-stylists" class="admin-tab-content" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2 style="font-size: 1.4rem;">Staff & Stylists Directory</h2>
+          <button id="openAddStylistModalBtn" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add New Stylist</button>
+        </div>
+
+        <div class="glass-panel" style="overflow-x: auto; padding: 10px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Stylist & Role</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Rating</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="stylistsTableBody">
+              <!-- Injected by admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 4: POS & REVENUE ANALYTICS
+           ========================================== -->
+      <div id="tabContent-analytics" class="admin-tab-content" style="display: none;">
+        <h2 style="font-size: 1.4rem; margin-bottom: 20px;">Visual Revenue & Service Analytics</h2>
+
+        <div style="display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 24px;">
+          <div class="glass-panel" style="padding: 24px;">
+            <h3 style="font-size: 1.15rem; margin-bottom: 16px;">Weekly Revenue Trend (INR ₹)</h3>
+            <canvas id="revenueChartCanvas" height="150"></canvas>
+          </div>
+          <div class="glass-panel" style="padding: 24px;">
+            <h3 style="font-size: 1.15rem; margin-bottom: 16px;">Service Category Distribution</h3>
+            <canvas id="servicesChartCanvas" height="150"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==========================================
+       MODAL: ADD SERVICE
+       ========================================== -->
+  <div id="serviceModal" class="modal-overlay">
+    <div class="modal-card" style="width: 550px;">
+      <h3 style="margin-bottom: 18px; font-family: var(--font-heading);">Add Salon Service</h3>
+      <div class="form-group">
+        <label class="form-label">Service Title</label>
+        <input type="text" id="newSvcName" class="form-control" placeholder="e.g. Keratin Hair Spa" />
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="form-group">
+          <label class="form-label">Price (INR ₹)</label>
+          <input type="number" id="newSvcPrice" class="form-control" placeholder="e.g. 1200" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Duration (Minutes)</label>
+          <input type="number" id="newSvcDuration" class="form-control" placeholder="e.g. 45" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea id="newSvcDesc" class="form-control" rows="2" placeholder="Brief service details..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Image URL (Optional)</label>
+        <input type="url" id="newSvcImg" class="form-control" placeholder="https://..." />
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button id="closeServiceModalBtn" class="btn btn-secondary">Cancel</button>
+        <button id="saveServiceBtn" class="btn btn-primary">Save Service</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL: ADD STYLIST
+       ========================================== -->
+  <div id="stylistModal" class="modal-overlay">
+    <div class="modal-card" style="width: 550px;">
+      <h3 style="margin-bottom: 18px; font-family: var(--font-heading);">Add Stylist / Staff Member</h3>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" id="newStyName" class="form-control" placeholder="e.g. Vikram Joshi" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Specialty Title</label>
+        <input type="text" id="newStyTitle" class="form-control" placeholder="e.g. Master Hair Stylist" />
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" id="newStyPhone" class="form-control" placeholder="+91 98..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" id="newStyEmail" class="form-control" placeholder="vikram@salon.in" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Photo Avatar URL (Optional)</label>
+        <input type="url" id="newStyAvatar" class="form-control" placeholder="https://..." />
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button id="closeStylistModalBtn" class="btn btn-secondary">Cancel</button>
+        <button id="saveStylistBtn" class="btn btn-primary">Save Stylist</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL: POS INVOICE BILL SLIP
+       ========================================== -->
+  <div id="invoiceModal" class="modal-overlay">
+    <div class="modal-card" style="width: 650px;">
+      <div id="printableInvoice">
+        <!-- Rendered by admin.js -->
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+        <button id="closeInvoiceModalBtn" class="btn btn-secondary">Close</button>
+        <button id="printInvoiceBtn" class="btn btn-primary"><i class="fa-solid fa-print"></i> Print Bill</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/db-connector.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

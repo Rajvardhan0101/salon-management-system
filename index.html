@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shree Royal Salon & Spa | Premier Hair, Skin & Wellness Parlour</title>
+  <meta name="description" content="Book haircuts, Ayurvedic herbal hair champi, O3+ D-Tan facials, beard styling, and bridal makeover at Shree Royal Salon." />
+  
+  <!-- FontAwesome Icons & Stylesheet -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ==========================================
+       NAVIGATION BAR
+       ========================================== -->
+  <header class="navbar">
+    <a href="index.html" class="brand-logo">
+      <div class="brand-icon"><i class="fa-solid fa-scissors"></i></div>
+      <span>SHREE ROYAL<span class="gold-accent-text"> SALON</span></span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#home" class="nav-link active">Home</a></li>
+      <li><a href="#services" class="nav-link">Services & Pricing</a></li>
+      <li><a href="#stylists" class="nav-link">Stylists</a></li>
+      <li><a href="#tracker" class="nav-link">Track Booking</a></li>
+      <li><a href="#reviews" class="nav-link">Reviews</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div id="dbStatusBadge" class="badge badge-warning"><i class="fa-solid fa-spinner fa-spin"></i> Checking DB</div>
+      
+      <!-- Single Common Authentication Option / Profile Bar -->
+      <div id="navAuthSection">
+        <button class="btn btn-secondary btn-sm" id="openAuthModalBtn"><i class="fa-solid fa-user-circle"></i> Login / Register</button>
+      </div>
+
+      <button class="btn btn-primary btn-sm" onclick="openBookingModal()"><i class="fa-solid fa-calendar-check"></i> Book Now</button>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       HERO SECTION
+       ========================================== -->
+  <section id="home" class="hero-section">
+    <div class="hero-content">
+      <div class="hero-tag">
+        <span class="badge badge-primary"><i class="fa-solid fa-crown"></i> Premier Indian Salon & Beauty Spa</span>
+      </div>
+      <h1 class="hero-title">Experience <span class="gold-accent-text">Royal Artistry</span> & Care</h1>
+      <p class="hero-subtitle">Elevate your personal style with master hairstylists, relaxing Ayurvedic herbal champi, glowing D-Tan facials, and traditional hot towel beard grooming.</p>
+      
+      <div class="hero-cta">
+        <button class="btn btn-primary btn-lg" onclick="openBookingModal()"><i class="fa-solid fa-calendar-plus"></i> Book Appointment</button>
+        <a href="#services" class="btn btn-secondary btn-lg"><i class="fa-solid fa-list"></i> View Services & Pricing</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <h4>25k+</h4>
+          <p>Delighted Guests</p>
+        </div>
+        <div class="stat-item">
+          <h4>10+</h4>
+          <p>Master Artists</p>
+        </div>
+        <div class="stat-item">
+          <h4>4.9 ★</h4>
+          <p>Guest Rating</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-image-card">
+        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80" alt="Shree Royal Salon Experience" />
+      </div>
+      <div class="floating-glass-badge">
+        <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem;">
+          <i class="fa-solid fa-qrcode"></i>
+        </div>
+        <div>
+          <strong style="color: var(--text-main); display: block; font-size: 0.95rem;">Seamless UPI / Cash Booking</strong>
+          <span style="color: var(--text-muted); font-size: 0.82rem;">Select slot, stylist & get instant ticket</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SERVICES SECTION
+       ========================================== -->
+  <section id="services" class="section-padding">
+    <div class="section-header">
+      <span class="badge badge-primary"><i class="fa-solid fa-spa"></i> Service Menu</span>
+      <h2 class="section-title">Signature Services & Treatments</h2>
+      <p class="section-desc">Handcrafted haircuts, herbal scalp therapies, brightening facials, and grooming rituals priced in Indian Rupees (₹).</p>
+    </div>
+
+    <div class="category-tabs" id="categoryTabs">
+      <!-- Dynamic Categories injected by JS -->
+    </div>
+
+    <div class="services-grid" id="servicesGrid">
+      <!-- Dynamic Services injected by JS -->
+    </div>
+  </section>
+
+  <!-- ==========================================
+       STYLISTS SECTION
+       ========================================== -->
+  <section id="stylists" class="section-padding" style="background: var(--bg-surface-soft); border-radius: var(--radius-lg); margin-bottom: 60px;">
+    <div class="section-header">
+      <span class="badge badge-primary"><i class="fa-solid fa-scissors"></i> Expert Stylists</span>
+      <h2 class="section-title">Meet Our Master Stylists & Artists</h2>
+      <p class="section-desc">Passionate beauty specialists and barbering craftsmen dedicated to your signature look.</p>
+    </div>
+
+    <div class="stylists-grid" id="stylistsGrid">
+      <!-- Dynamic Stylist cards injected by JS -->
+    </div>
+  </section>
+
+  <!-- ==========================================
+       BOOKING TRACKER SECTION
+       ========================================== -->
+  <section id="tracker" class="section-padding">
+    <div class="section-header">
+      <span class="badge badge-primary"><i class="fa-solid fa-magnifying-glass"></i> Self Service</span>
+      <h2 class="section-title">Track Your Appointment</h2>
+      <p class="section-desc">Already booked? Enter your Reference Code (e.g., SLN-8921) or 10-digit mobile number to view status.</p>
+    </div>
+
+    <div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 32px;">
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <input type="text" id="trackerRefInput" class="form-control" style="flex: 1;" placeholder="e.g. SLN-8921 or 9876543210" />
+        <button id="searchAppointmentBtn" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Track</button>
+      </div>
+
+      <div id="trackerResultBox" style="display: none;">
+        <!-- Tracker details injected here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       REVIEWS & TESTIMONIALS SECTION
+       ========================================== -->
+  <section id="reviews" class="section-padding" style="background: var(--bg-surface-soft); border-radius: var(--radius-lg);">
+    <div class="section-header">
+      <span class="badge badge-primary"><i class="fa-solid fa-star"></i> Testimonials</span>
+      <h2 class="section-title">What Our Guests Say</h2>
+      <p class="section-desc">Genuine experiences from our clients across India.</p>
+    </div>
+
+    <div class="services-grid" id="reviewsGrid" style="margin-bottom: 40px;">
+      <!-- Dynamic Reviews injected by JS -->
+    </div>
+
+    <!-- Review Form Card -->
+    <div class="glass-panel" style="max-width: 650px; margin: 0 auto; padding: 32px;">
+      <h3 style="font-family: var(--font-heading); color: var(--text-main); margin-bottom: 16px;">Share Your Salon Experience</h3>
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input type="text" id="revName" class="form-control" placeholder="e.g. Rahul Sharma" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Rating</label>
+        <select id="revRating" class="form-control">
+          <option value="5">⭐⭐⭐⭐⭐ (5 Stars - Outstanding Experience)</option>
+          <option value="4">⭐⭐⭐⭐ (4 Stars - Great Service)</option>
+          <option value="3">⭐⭐⭐ (3 Stars - Satisfied)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Review Comment</label>
+        <textarea id="revComment" class="form-control" rows="3" placeholder="Tell us about the hairstyle, facial, or service you received..."></textarea>
+      </div>
+      <button id="submitReviewBtn" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit Review</button>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       AUTHENTICATION MODAL (LOGIN & REGISTER)
+       Customer & Admin Login + Registration
+       ========================================== -->
+  <div id="authModal" class="modal-overlay">
+    <div class="modal-card" style="width: 520px; max-width: 95%;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--text-main);">
+          <i class="fa-solid fa-user-lock gold-accent-text"></i> Salon Portal Access
+        </h3>
+        <button id="closeAuthModalBtn" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Primary Mode Tabs: 1. Login  |  2. Register -->
+      <div class="auth-primary-tabs">
+        <button class="auth-primary-tab active" id="authModeLoginBtn">
+          <i class="fa-solid fa-right-to-bracket"></i> 1. Login
+        </button>
+        <button class="auth-primary-tab" id="authModeRegisterBtn">
+          <i class="fa-solid fa-user-plus"></i> 2. Register
+        </button>
+      </div>
+
+      <!-- ==========================================
+           SECTION 1: COMMON LOGIN PORTAL (CUSTOMER & ADMIN)
+           ========================================== -->
+      <div id="authModeLoginContainer">
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 16px; text-align: center;">
+          Sign in to your account. Both customers and salon administrators can log in here.
+        </p>
+
+        <div id="commonLoginForm">
+          <div class="form-group">
+            <label class="form-label">Mobile Number (Customer) or Username (Admin) *</label>
+            <input type="text" id="commonLoginIdentifier" class="form-control" placeholder="e.g. 9876543210 (Customer) or admin (Admin)" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password *</label>
+            <input type="password" id="commonLoginPassword" class="form-control" placeholder="Enter password" />
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+              <button type="button" class="demo-fill-pill" id="fillDemoCustomerLogin">
+                <i class="fa-solid fa-user"></i> Demo Customer (9876543210 / 123456)
+              </button>
+              <button type="button" class="demo-fill-pill" id="fillDemoAdminLogin">
+                <i class="fa-solid fa-shield-alt"></i> Demo Admin (admin / admin123)
+              </button>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="commonLoginSubmitBtn" style="width: 100%; margin-top: 10px;">
+            <i class="fa-solid fa-sign-in-alt"></i> Login
+          </button>
+          <div style="text-align: center; margin-top: 16px; font-size: 0.88rem; color: var(--text-muted);">
+            Don't have an account? <a href="javascript:void(0)" id="switchCustRegLink" style="color: var(--primary); font-weight: 600;">Register an Account</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           SECTION 2: REGISTER (CUSTOMER & ADMIN)
+           ========================================== -->
+      <div id="authModeRegisterContainer" style="display: none;">
+        <!-- Sub Tabs for Register Role -->
+        <div class="auth-sub-tabs">
+          <button class="auth-sub-tab active" id="regRoleCustTab">
+            <i class="fa-solid fa-user-plus"></i> Customer Register
+          </button>
+          <button class="auth-sub-tab" id="regRoleAdminTab">
+            <i class="fa-solid fa-shield-alt"></i> Admin Register
+          </button>
+        </div>
+
+        <!-- 2.A. Customer Register Form -->
+        <div id="regCustForm">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" id="regCustName" class="form-control" placeholder="e.g. Neha Verma" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mobile Number (+91) *</label>
+            <input type="tel" id="regCustPhone" class="form-control" placeholder="e.g. 9811223344" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address (Optional)</label>
+            <input type="email" id="regCustEmail" class="form-control" placeholder="neha@example.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Create Password *</label>
+            <input type="password" id="regCustPassword" class="form-control" placeholder="Minimum 4 characters" />
+          </div>
+          <button class="btn btn-primary" id="custRegSubmitBtn" style="width: 100%; margin-top: 10px;">
+            <i class="fa-solid fa-user-plus"></i> Register as Customer
+          </button>
+          <div style="text-align: center; margin-top: 14px; font-size: 0.85rem; color: var(--text-muted);">
+            Already have an account? <a href="javascript:void(0)" id="switchCustLoginLink" style="color: var(--primary); font-weight: 600;">Login as Customer</a>
+          </div>
+        </div>
+
+        <!-- 2.B. Admin Register Form -->
+        <div id="regAdminForm" style="display: none;">
+          <div class="form-group">
+            <label class="form-label">Admin Username *</label>
+            <input type="text" id="regAdminUsername" class="form-control" placeholder="e.g. manager1" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" id="regAdminFullName" class="form-control" placeholder="e.g. Vikram Joshi" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="regAdminEmail" class="form-control" placeholder="vikram@salon.in" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Create Password *</label>
+            <input type="password" id="regAdminPassword" class="form-control" placeholder="Create a strong password" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Salon Security Passcode (Optional)</label>
+            <input type="text" id="regAdminPasscode" class="form-control" placeholder="Default: SALON2026" value="SALON2026" />
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 4px;">Passcode ensures only authorized salon personnel register as admin.</span>
+          </div>
+          <button class="btn btn-primary" id="adminRegSubmitBtn" style="width: 100%; margin-top: 10px;">
+            <i class="fa-solid fa-shield-alt"></i> Register as Salon Admin
+          </button>
+          <div style="text-align: center; margin-top: 14px; font-size: 0.85rem; color: var(--text-muted);">
+            Already have an admin account? <a href="javascript:void(0)" id="switchAdminLoginLink" style="color: var(--primary); font-weight: 600;">Login as Admin</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="authAlertBox" style="margin-top: 14px; display: none;"></div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MY APPOINTMENTS MODAL (LOGGED IN CUSTOMER)
+       ========================================== -->
+  <div id="myBookingsModal" class="modal-overlay">
+    <div class="modal-card" style="width: 750px; max-width: 95%;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 14px;">
+        <h3 style="font-family: var(--font-heading); color: var(--text-main); font-size: 1.4rem;">
+          <i class="fa-solid fa-calendar-days gold-accent-text"></i> My Salon Bookings
+        </h3>
+        <button id="closeMyBookingsModalBtn" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div id="myBookingsList" style="max-height: 400px; overflow-y: auto;">
+        <!-- Injected by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       BOOKING WIZARD MODAL OVERLAY
+       ========================================== -->
+  <div id="bookingModal" class="modal-overlay">
+    <div class="modal-card" style="width: 800px; max-width: 95%;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 16px;">
+        <h3 style="font-family: var(--font-heading); color: var(--text-main); font-size: 1.5rem;"><i class="fa-solid fa-calendar-check" style="color: var(--primary);"></i> Online Appointment Booking</h3>
+        <button id="closeBookingModalBtn" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Step Indicator Bar -->
+      <div class="wizard-steps" style="margin-bottom: 24px;">
+        <div class="wizard-step active" id="stepIndicator1"><span class="step-number">1</span> <span>Service</span></div>
+        <div class="wizard-step" id="stepIndicator2"><span class="step-number">2</span> <span>Stylist</span></div>
+        <div class="wizard-step" id="stepIndicator3"><span class="step-number">3</span> <span>Slot</span></div>
+        <div class="wizard-step" id="stepIndicator4"><span class="step-number">4</span> <span>Details</span></div>
+        <div class="wizard-step" id="stepIndicator5"><span class="step-number">5</span> <span>Ticket</span></div>
+      </div>
+
+      <!-- Step 1: Select Service -->
+      <div id="wizardStepContent1" class="wizard-step-content">
+        <h4 style="color: var(--text-main); margin-bottom: 14px; font-family: var(--font-heading);">Step 1: Choose Your Salon Service</h4>
+        <div id="wizardServicesList" style="max-height: 280px; overflow-y: auto; padding-right: 6px;"></div>
+      </div>
+
+      <!-- Step 2: Choose Stylist -->
+      <div id="wizardStepContent2" class="wizard-step-content" style="display: none;">
+        <h4 style="color: var(--text-main); margin-bottom: 14px; font-family: var(--font-heading);">Step 2: Select Preferred Stylist</h4>
+        <div id="wizardStylistsList" style="max-height: 280px; overflow-y: auto; padding-right: 6px;"></div>
+      </div>
+
+      <!-- Step 3: Date & Time -->
+      <div id="wizardStepContent3" class="wizard-step-content" style="display: none;">
+        <h4 style="color: var(--text-main); margin-bottom: 14px; font-family: var(--font-heading);">Step 3: Select Date & Available Time Slot</h4>
+        <div class="form-group">
+          <label class="form-label">Appointment Date</label>
+          <input type="date" id="bookDate" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Available Time Slots</label>
+          <div id="timeSlotsGrid" class="time-slots-grid"></div>
+        </div>
+      </div>
+
+      <!-- Step 4: Contact Info -->
+      <div id="wizardStepContent4" class="wizard-step-content" style="display: none;">
+        <h4 style="color: var(--text-main); margin-bottom: 14px; font-family: var(--font-heading);">Step 4: Customer Details</h4>
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" id="custName" class="form-control" placeholder="e.g. Rahul Sharma" />
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label class="form-label">Mobile Number *</label>
+            <input type="tel" id="custPhone" class="form-control" placeholder="e.g. 9876543210" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address (Optional)</label>
+            <input type="email" id="custEmail" class="form-control" placeholder="rahul@example.com" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Special Requests (Hair texture, scalp care, etc.)</label>
+          <input type="text" id="custNotes" class="form-control" placeholder="e.g. Sensitive scalp, side fade preference" />
+        </div>
+        <div id="bookingSummaryBox"></div>
+      </div>
+
+      <!-- Step 5: Confirmation Ticket -->
+      <div id="wizardStepContent5" class="wizard-step-content" style="display: none;">
+        <div id="confirmationTicketBox"></div>
+      </div>
+
+      <!-- Wizard Controls -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 30px; border-top: 1px solid var(--border-light); padding-top: 20px;">
+        <button id="prevStepBtn" class="btn btn-secondary" style="display: none;"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+        <div></div>
+        <button id="nextStepBtn" class="btn btn-primary">Next Step <i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="site-footer">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; text-align: left; margin-bottom: 40px;">
+      <div>
+        <a href="index.html" class="brand-logo" style="margin-bottom: 12px; color: #FFFFFF;">
+          <div class="brand-icon"><i class="fa-solid fa-scissors"></i></div>
+          <span>SHREE ROYAL<span class="gold-accent-text"> SALON</span></span>
+        </a>
+        <p style="max-width: 320px; color: #A6AFBD; font-size: 0.9rem;">Premier salon management and booking portal. Crafted with Core Java + JDBC backend & MySQL database.</p>
+      </div>
+      <div>
+        <h4>Salon Hours</h4>
+        <p>Monday - Saturday: 9:00 AM - 8:30 PM</p>
+        <p>Sunday: 9:30 AM - 7:00 PM</p>
+      </div>
+      <div>
+        <h4>Visit Our Salon</h4>
+        <p><i class="fa-solid fa-location-dot"></i> Connaught Place / MG Road, India</p>
+        <p><i class="fa-solid fa-phone"></i> +91 98765 43210</p>
+        <p><i class="fa-solid fa-qrcode"></i> UPI (GPay, PhonePe, Paytm) Accepted</p>
+      </div>
+    </div>
+    <p style="border-top: 1px solid var(--border-dark); padding-top: 20px; text-align: center; font-size: 0.88rem;">© 2026 Shree Royal Salon & Spa. Java + JDBC Backend Architecture.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/db-connector.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
